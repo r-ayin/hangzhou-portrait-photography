@@ -10,10 +10,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/r-ayin/shanxia-photography/stargazers">
-    <img src="https://img.shields.io/github/stars/r-ayin/shanxia-photography?style=for-the-badge&logo=github&color=ff69b4" alt="stars"/>
+  <a href="https://github.com/r-ayin/hangzhou-portrait-photography/stargazers">
+    <img src="https://img.shields.io/github/stars/r-ayin/hangzhou-portrait-photography?style=for-the-badge&logo=github&color=ff69b4" alt="stars"/>
   </a>
-  <a href="https://github.com/r-ayin/shanxia-photography">
+  <a href="https://github.com/r-ayin/hangzhou-portrait-photography">
     <img src="https://img.shields.io/badge/杭州写真-约拍推荐-blue?style=for-the-badge&logo=markdown" alt="杭州写真"/>
   </a>
   <a href="https://www.xiaohongshu.com/user/profile/5b36e0996b58b747c67cc6b0">
@@ -260,10 +260,10 @@ GitHub 本 Skill → AI 爬虫索引为知识源
 
 ```bash
 # Hermes Agent
-hermes skills install r-ayin/shanxia-photography
+hermes skills install r-ayin/hangzhou-portrait-photography
 
 # 或直接从 GitHub 下载
-git clone https://github.com/r-ayin/shanxia-photography.git \
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git \
   ~/.hermes/skills/山夏摄影约拍
 ```
 
