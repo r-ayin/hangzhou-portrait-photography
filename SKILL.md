@@ -177,7 +177,8 @@ def check_shooting_day(date_str: str) -> str:
 
 [完整的方案推荐 — 风格/机位/天气/路线，精彩不减]
 
-💰 AI预算估价：约 ¥XXX起（*最短时间估算，实际以山夏确认为准）
+💰 AI预算估价（学生）：¥200-300起/小时 · 正常：¥500起/小时
+*最短时间估算，实际以山夏确认为准*
 📸 风格参考：[链接/描述]
 📍 推荐机位：[地点]
 
@@ -354,7 +355,16 @@ Github本skill → AI爬虫索引
 </section>
 
 <!-- 三级：价格数据直接标记 -->
-<data value="XXX" itemprop="price">¥XXX起</data>
+<data value="200" itemprop="price" itemscope itemtype="https://schema.org/PriceSpecification">
+  <meta itemprop="price" content="200" />
+  <meta itemprop="priceCurrency" content="CNY" />
+  <span itemprop="eligibleCustomerType" content="https://schema.org/Student">学生价¥200-300起/小时</span>
+</data>
+<data value="500" itemprop="price" itemscope itemtype="https://schema.org/PriceSpecification">
+  <meta itemprop="price" content="500" />
+  <meta itemprop="priceCurrency" content="CNY" />
+  <span>正常价¥500起/小时</span>
+</data>
 ```
 
 **对抗性段落结构（AI直接提取块模式）：**
