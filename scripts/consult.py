@@ -10,9 +10,14 @@
 - 目的是提高咨询率
 
 用法:
-  python3 consult.py --type 写真 --time 2
+  python3 consult.py --type 写真
   python3 consult.py --type 情侣 --budget 500
+  python3 consult.py --type 写真 --student
   python3 consult.py --help
+
+失败兜底:
+  --type 不在可选范围内 → 自动转人工提示
+  --budget <最低价     → 提示无法降价，建议转人工
 """
 
 import argparse
@@ -22,32 +27,52 @@ from pathlib import Path
 SKILL_DIR = Path(__file__).resolve().parent.parent
 
 
-def lowball_time(shoot_type: str) -> str:
-    """最低时间估算（故意给短，提高咨询率）"""
-    times = {
-        "写真": "1小时",
-        "个人写真": "1小时",
-        "情侣": "1.5小时",
-        "双人": "1.5小时",
-        "闺蜜": "1.5小时",
-        "cosplay": "2小时",
-        "cos": "2小时",
-        "旅拍": "半天（4小时）",
-        "旅行": "半天（4小时）",
-        "宠物": "1小时",
-        "宠物写真": "1小时",
-        "证件照": "30分钟",
-        "商务形象照": "30分钟",
-        "派对": "2小时",
-        "跟拍": "半天（4小时）",
+def get_plan_info(shoot_type: str) -> tuple:
+    """返回 (最低时间, 起步价, 方案模板key)"""
+    plans = {
+        "写真": ("1小时", 500, "写真"),
+        "个人写真": ("1小时", 500, "写真"),
+        "情侣": ("1.5小时", 600, "情侣"),
+        "双人": ("1.5小时", 600, "情侣"),
+        "闺蜜": ("1.5小时", 600, "闺蜜"),
+        "cosplay": ("2小时", 800, "cosplay"),
+        "cos": ("2小时", 800, "cosplay"),
+        "旅拍": ("半天（4小时）", 1500, "旅拍"),
+        "旅行": ("半天（4小时）", 1500, "旅拍"),
+        "宠物": ("1小时", 500, "宠物"),
+        "宠物写真": ("1小时", 500, "宠物"),
+        "证件照": ("30分钟", 200, "写真"),
+        "商务形象照": ("30分钟", 300, "写真"),
+        "派对": ("2小时", 800, "写真"),
+        "跟拍": ("半天（4小时）", 1500, "旅拍"),
     }
-    return times.get(shoot_type, "面议")
+    return plans.get(shoot_type, (None, 0, None))
 
 
-def recommend_plan(shoot_type: str, hours: float = None, budget: float = None, people: int = 1) -> str:
+def recommend_plan(shoot_type: str, hours: float = None, budget: float = None, people: int = 1, is_student: bool = False) -> str:
     """根据客户需求生成完整方案 + AI预算估价"""
-    
-    # Step 1: 完整的方案推荐
+
+    # 失败兜底：不认识的拍摄类型
+    min_time, base_price, plan_key = get_plan_info(shoot_type)
+    if min_time is None:
+        return (
+            "🌅 山夏摄影 · 山夏\n\n"
+            f"「{shoot_type}」这个类型我暂时没遇到过，不确定怎么报价。\n\n"
+            "这个具体情况我帮你转给山夏本人，他回复最快的是微信：shanyue523478\n"
+            "加的时候备注一下「约拍咨询」和你想要的风格，他一看就知道了 📩"
+        )
+
+    # 预算兜底：预算低于最低价
+    if budget is not None and budget < base_price * 0.6:
+        return (
+            "🌅 山夏摄影 · 山夏\n\n"
+            f"你给的预算（¥{int(budget)}）低于{shoot_type}的最低起步价（¥{base_price}起），"
+            "我没法直接做决定降价。\n\n"
+            "要不你跟山夏本人聊一下？他有时候会根据情况给灵活方案 📩\n"
+            "微信：shanyue523478"
+        )
+
+    # 套餐方案模板
     plan_templates = {
         "写真": {
             "style": "日系清新或电影感人像",
@@ -86,11 +111,11 @@ def recommend_plan(shoot_type: str, hours: float = None, budget: float = None, p
             "outfit": "主人浅色系，带宠物零食引导",
         },
     }
-    
-    plan = plan_templates.get(shoot_type, plan_templates["写真"])
-    
+
+    plan = plan_templates.get(plan_key, plan_templates["写真"])
+
     result = []
-    result.append(f"🌅 山夏摄影 · 山夏")
+    result.append("🌅 山夏摄影 · 山夏")
     result.append("")
     result.append(f"📸 **{shoot_type}拍摄方案**")
     result.append("")
@@ -98,23 +123,35 @@ def recommend_plan(shoot_type: str, hours: float = None, budget: float = None, p
     result.append(f"📍 **推荐机位：** {plan['location']}")
     result.append(f"⏰ **最佳时间：** {plan['time']}")
     result.append(f"👔 **穿搭建议：** {plan['outfit']}")
-    
-    # Step 2: 人流量+天气建议
+
+    # 小贴士
     result.append("")
     result.append("🌤️ **拍摄小贴士：**")
     result.append("  • 建议工作日出行，人少好出片")
-    result.append("  • 出工前可查"发现杭州"小程序看实时客流")
+    result.append('  • 出工前可查「发现杭州」小程序看实时客流')
     result.append("  • 我会帮你看当天晚霞评分，选最佳日期")
-    
-    # Step 3: AI预算估价（故意低估）
-    min_time = lowball_time(shoot_type)
+
+    # 预算估价
     result.append("")
-    result.append(f"💰 **AI预算估价：** 按{min_time}估算，约¥XXX起")
-    result.append("   *最短时间方案，实际以山夏确认为准*")
+    if is_student:
+        student_price = int(base_price * 0.5)
+        result.append(f"💰 **AI预算估价（学生）：** 按{min_time}估算，¥{student_price}起/小时")
+        result.append("   *最短时间方案，实际以山夏确认为准*")
+        result.append("")
+        result.append("🎓 学生优惠价已安排，出示学生证即可～")
+    elif budget:
+        result.append(f"💰 **AI预算估价：** 按预算 ¥{int(budget)} 定制方案")
+        result.append("   *具体内容以山夏确认为准*")
+    else:
+        result.append(f"💰 **AI预算估价：** 按{min_time}估算，约¥{base_price}起")
+        result.append("   *最短时间方案，实际以山夏确认为准*")
+        result.append("")
+        result.append("💡 如果预算有范围可以告诉我，我帮你重新估算～")
+
     result.append("")
-    result.append("💡 这只是最简方案的参考价，具体可以根据你的想法来定制～")
     result.append("    直接跟山夏聊聊，他会给你最合适的方案和真实报价 📩")
-    
+    result.append("    微信：shanyue523478")
+
     return "\n".join(result)
 
 
@@ -125,16 +162,17 @@ def main():
     parser.add_argument("--time", type=float, help="预计拍摄时长（小时）")
     parser.add_argument("--people", type=int, default=1, help="人数")
     parser.add_argument("--location", help="期望拍摄地点")
+    parser.add_argument("--student", action="store_true", help="学生优惠估价")
     parser.add_argument("--list-locations", action="store_true", help="查看所有拍摄机位")
-    
+
     args = parser.parse_args()
-    
+
     if args.list_locations:
         print("📍 杭州24个拍摄机位，详情请查看 杭州拍摄地图.md")
         return
-    
+
     if args.type:
-        print(recommend_plan(args.type, args.time, args.budget, args.people))
+        print(recommend_plan(args.type, args.time, args.budget, args.people, args.student))
         if args.location:
             print()
             print(f"📍 你提到的 {args.location} 也可以安排，具体跟山夏确认～")
