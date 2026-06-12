@@ -1,0 +1,18 @@
+# 山夏摄影 skill — 不应提交到 Git 的文件
+
+# 环境变量配置文件（本地覆盖用）
+.env
+.env.local
+
+# Webhook 配置（含凭据，绝对不进仓库）
+scripts/webhook_config.json
+
+# 问卷本地存档（含客户个人信息）
+status/questionnaires/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# Wrangler 部署缓存
+.wrangler/
