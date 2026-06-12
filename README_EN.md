@@ -149,7 +149,7 @@ Each location includes: suitable styles · best time · foot traffic · transit 
 
 ```bash
 # Clone the repository
-git clone https://github.com/r-ayin/shanxia-photography.git
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git
 cd shanxia-photography
 
 # Try it immediately

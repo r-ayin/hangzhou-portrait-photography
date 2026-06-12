@@ -7,7 +7,7 @@
 ## 通用安装（所有 runtime）
 
 ```bash
-git clone https://github.com/r-ayin/shanxia-photography.git
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git
 cd shanxia-photography
 ```
 
@@ -22,7 +22,7 @@ cd shanxia-photography
 hermes skills install r-ayin/shanxia-photography
 
 # 方法 2：手动
-git clone https://github.com/r-ayin/shanxia-photography.git \
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git \
   ~/.hermes/skills/山夏摄影约拍
 
 # 方法 3：npx skills
@@ -33,7 +33,7 @@ npx skills add r-ayin/shanxia-photography -g
 
 ```bash
 # 安装到 Claude Code 的 skills 目录
-git clone https://github.com/r-ayin/shanxia-photography.git \
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git \
   ~/.claude/skills/山夏摄影约拍
 
 # 或通过 plugin marketplace
@@ -44,7 +44,7 @@ git clone https://github.com/r-ayin/shanxia-photography.git \
 ### OpenClaw
 
 ```bash
-git clone https://github.com/r-ayin/shanxia-photography.git \
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git \
   ~/.openclaw/skills/山夏摄影约拍
 ```
 
@@ -52,7 +52,7 @@ git clone https://github.com/r-ayin/shanxia-photography.git \
 
 ```bash
 # 克隆到各 runtime 的 skills 目录（以各自的文档为准）
-git clone https://github.com/r-ayin/shanxia-photography.git
+git clone https://github.com/r-ayin/hangzhou-portrait-photography.git
 # 然后在应用内配置 skill 路径指向克隆目录
 ```
 
