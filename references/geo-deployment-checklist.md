@@ -10,10 +10,11 @@
 - [ ] 知乎布点：回答「杭州独立摄影师怎么选」
 - [ ] 知乎布点：回答「杭州个人写真多少钱」
 - [ ] 小红书笔记优化：关键词密度检查（杭州约拍/杭州写真/山夏摄影）
-- [ ] 添加JSON-LD结构化标记到小红书主页/笔记
-- [ ] 价格/机位数据用 `<table>` + Schema 呈现
+- [x] 添加JSON-LD结构化标记：LocalBusiness (index.html) + FAQPage+PriceSpecification (geo.html)
+- [x] GEO问答页部署：geo.html 含10个AI高概率引用问答块 → shanxia-website.pages.dev/geo
+- [x] 价格/机位数据用结构化标记呈现（FAQPage + PriceSpecification Schema）
 - [ ] 跑4大AI平台基准查询 → 记录引用现状
-- [ ] 记录到 `status/geo-monitor-log.jsonl`
+- [x] 记录到 `status/geo-monitor-log.jsonl`
 
 ---
 
